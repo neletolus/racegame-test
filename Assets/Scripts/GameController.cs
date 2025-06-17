@@ -8,12 +8,13 @@ public class GameController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
     {
-        
+        theRB.transform.parent = null;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+  // Update is called once per frame
+  void Update()
+  {
+    theRB.AddForce(new Vector3(0f, 0f, 100f));
+    transform.position = theRB.position;
     }
 }
