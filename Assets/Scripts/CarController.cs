@@ -67,7 +67,7 @@ public class GameController : MonoBehaviour
     // 車が動いている時のみ回転を適用（より現実的な車の動作）
     if (Mathf.Abs(speedInput) > 0.1f)
     {
-      transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime, 0f));
+      transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * theRB.linearVelocity.magnitude / maxSpeed, 0f));
       theRB.rotation = transform.rotation; // Rigidbodyの回転も同期
     }
   }
