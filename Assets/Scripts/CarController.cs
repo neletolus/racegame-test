@@ -16,14 +16,19 @@ public class GameController : MonoBehaviour
   private bool grounded;
 
   public Transform groundRayPoint;
+  public Transform groundRayPoint2;
 
   public LayerMask whatIsGround;
   public float groundRayLength = 0.75f;
+
+  private float dragOnGround;
+  public float gravityMod = 10f;
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
     theRB.transform.parent = null;
+    dragOnGround = theRB.linearDamping;
   }
 
   // Update is called once per frame
@@ -84,16 +89,34 @@ public class GameController : MonoBehaviour
     grounded = false;
 
     RaycastHit hit;
+    Vector3 normalTarget = Vector3.zero;
 
     if (Physics.Raycast(groundRayPoint.position, -transform.up, out hit, groundRayLength, whatIsGround))
     {
       grounded = true;
+      normalTarget = hit.normal;
+    }
+
+    if (Physics.Raycast(groundRayPoint2.position, -transform.up, out hit, groundRayLength, whatIsGround))
+    {
+      grounded = true;
+      normalTarget = (normalTarget + hit.normal) / 2f;
     }
 
     if (grounded)
-    {
-      theRB.AddForce(transform.forward * speedInput * 1000f);
+      {
+        transform.rotation = Quaternion.FromToRotation(transform.up, normalTarget) * transform.rotation;
+      }
 
+    if (grounded)
+    {
+      theRB.linearDamping = dragOnGround;
+      theRB.AddForce(transform.forward * speedInput * 1000f);
+    }
+    else
+    {
+      theRB.linearDamping = 0.1f;
+      theRB.AddForce(-Vector3.up * gravityMod * 100f);
     }
 
     // 最大速度の制限
