@@ -13,6 +13,13 @@ public class GameController : MonoBehaviour
   public float turnStrength = 180f;
   private float turnInput;
 
+  private bool grounded;
+
+  public Transform groundRayPoint;
+
+  public LayerMask whatIsGround;
+  public float groundRayLength = 0.75f;
+
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
@@ -65,7 +72,7 @@ public class GameController : MonoBehaviour
     transform.position = theRB.position;
 
     // 車が動いている時のみ回転を適用（より現実的な車の動作）
-    if (Mathf.Abs(speedInput) > 0.1f)
+    if (grounded && Mathf.Abs(speedInput) > 0.1f)
     {
       transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * theRB.linearVelocity.magnitude / maxSpeed, 0f));
       theRB.rotation = transform.rotation; // Rigidbodyの回転も同期
@@ -74,8 +81,20 @@ public class GameController : MonoBehaviour
 
   void FixedUpdate()
   {
-    // 前進・後進の力を加える
-    theRB.AddForce(transform.forward * speedInput * 1000f);
+    grounded = false;
+
+    RaycastHit hit;
+
+    if (Physics.Raycast(groundRayPoint.position, -transform.up, out hit, groundRayLength, whatIsGround))
+    {
+      grounded = true;
+    }
+
+    if (grounded)
+    {
+      theRB.AddForce(transform.forward * speedInput * 1000f);
+
+    }
 
     // 最大速度の制限
     if (theRB.linearVelocity.magnitude > maxSpeed)
