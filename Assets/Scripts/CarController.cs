@@ -61,25 +61,26 @@ public class GameController : MonoBehaviour
       speedInput = verticalInput * reverseAccel;
     }
     turnInput = horizontalInput;
-    
+
     transform.position = theRB.position;
 
     // 車が動いている時のみ回転を適用（より現実的な車の動作）
     if (Mathf.Abs(speedInput) > 0.1f)
     {
-      transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime, 0f));      theRB.rotation = transform.rotation; // Rigidbodyの回転も同期
+      transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime, 0f));
+      theRB.rotation = transform.rotation; // Rigidbodyの回転も同期
     }
   }
 
   void FixedUpdate()
   {
-      // 前進・後進の力を加える
-      theRB.AddForce(transform.forward * speedInput * 1000f);
+    // 前進・後進の力を加える
+    theRB.AddForce(transform.forward * speedInput * 1000f);
 
-      // 最大速度の制限
-      if (theRB.linearVelocity.magnitude > maxSpeed)
-      {
-        theRB.linearVelocity = theRB.linearVelocity.normalized * maxSpeed;
-      }
+    // 最大速度の制限
+    if (theRB.linearVelocity.magnitude > maxSpeed)
+    {
+      theRB.linearVelocity = theRB.linearVelocity.normalized * maxSpeed;
     }
   }
+}
