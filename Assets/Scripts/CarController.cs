@@ -86,17 +86,15 @@ public class GameController : MonoBehaviour
     turnInput = horizontalInput;
 
     // 車が動いている時のみ回転を適用（より現実的な車の動作）
-    if (grounded && Mathf.Abs(speedInput) > 0.1f)
-    {
-      transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * theRB.linearVelocity.magnitude / maxSpeed, 0f));
-      theRB.rotation = transform.rotation; // Rigidbodyの回転も同期
-    }
+    // if (grounded && Mathf.Abs(speedInput) > 0.1f)
+    // {
+    //   transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * theRB.linearVelocity.magnitude / maxSpeed, 0f));
+    //   theRB.rotation = transform.rotation; // Rigidbodyの回転も同期
+    // }
 
     // 車輪の回転
     leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, (turnInput * maxWheelTurn) - 180, leftFrontWheel.localRotation.eulerAngles.z);
     rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, turnInput * maxWheelTurn, rightFrontWheel.localRotation.eulerAngles.z);
-
-    transform.position = theRB.position;
 
     // パーティクルのエミッション制御
     emissionRate = Mathf.MoveTowards(emissionRate, 0f, Time.deltaTime * emissionFadeSpeed);
@@ -157,6 +155,15 @@ public class GameController : MonoBehaviour
     if (theRB.linearVelocity.magnitude > maxSpeed)
     {
       theRB.linearVelocity = theRB.linearVelocity.normalized * maxSpeed;
+    }
+
+    transform.position = theRB.position;
+
+    // 車が動いている時のみ回転を適用（より現実的な車の動作）
+    if (grounded && Mathf.Abs(speedInput) > 0.1f)
+    {
+      transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * theRB.linearVelocity.magnitude / maxSpeed, 0f));
+      theRB.rotation = transform.rotation; // Rigidbodyの回転も同期
     }
   }
 }
