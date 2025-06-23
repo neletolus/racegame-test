@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class GameController : MonoBehaviour
+public class CarController : MonoBehaviour
 {
   public Rigidbody theRB;
   public float maxSpeed;
