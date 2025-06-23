@@ -4996,8 +4996,8 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: -3418267353317680407, guid: 9e18438a8e04d4402bc4bde3f71fa0f3, type: 2}
   m_audioClip: {fileID: 8300000, guid: 3f54d606a50fd2845b692ee955c99e9f, type: 3}
   m_Resource: {fileID: 8300000, guid: 3f54d606a50fd2845b692ee955c99e9f, type: 3}
-  m_PlayOnAwake: 0
-  m_Volume: 1
+  m_PlayOnAwake: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -5839,6 +5839,8 @@ MonoBehaviour:
   maxEmission: 25
   emissionFadeSpeed: 50
   engineSound: {fileID: 463938616}
+  skidSound: {fileID: 345694339}
+  skidFadeSpeed: 2
 --- !u!81 &621793123
 AudioListener:
   m_ObjectHideFlags: 0

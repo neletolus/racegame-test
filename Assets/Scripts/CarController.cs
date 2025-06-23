@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,6 +37,8 @@ public class CarController : MonoBehaviour
   private float emissionRate;
 
   public AudioSource engineSound;
+  public AudioSource skidSound;
+  public float skidFadeSpeed;
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
@@ -87,13 +90,6 @@ public class CarController : MonoBehaviour
     }
     turnInput = horizontalInput;
 
-    // 車が動いている時のみ回転を適用（より現実的な車の動作）
-    // if (grounded && Mathf.Abs(speedInput) > 0.1f)
-    // {
-    //   transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * theRB.linearVelocity.magnitude / maxSpeed, 0f));
-    //   theRB.rotation = transform.rotation; // Rigidbodyの回転も同期
-    // }
-
     // 車輪の回転
     leftFrontWheel.localRotation = Quaternion.Euler(leftFrontWheel.localRotation.eulerAngles.x, (turnInput * maxWheelTurn) - 180, leftFrontWheel.localRotation.eulerAngles.z);
     rightFrontWheel.localRotation = Quaternion.Euler(rightFrontWheel.localRotation.eulerAngles.x, turnInput * maxWheelTurn, rightFrontWheel.localRotation.eulerAngles.z);
@@ -120,6 +116,18 @@ public class CarController : MonoBehaviour
     if (engineSound != null)
     {
       engineSound.pitch = 1f + ((theRB.linearVelocity.magnitude / maxSpeed) * 2f);
+    }
+
+    if (skidSound != null)
+    {
+      if (Mathf.Abs(turnInput) > 0.5f)
+      {
+        skidSound.volume = 1f;
+      }
+      else
+      {
+        skidSound.volume = Mathf.MoveTowards(skidSound.volume, 0f, Time.deltaTime * skidFadeSpeed);
+      }
     }
   }
 
