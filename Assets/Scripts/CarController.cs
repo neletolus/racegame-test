@@ -35,6 +35,8 @@ public class CarController : MonoBehaviour
 
   private float emissionRate;
 
+  public AudioSource engineSound;
+
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
@@ -113,6 +115,11 @@ public class CarController : MonoBehaviour
     {
       var emission = dustTrail.emission;
       emission.rateOverTime = emissionRate;
+    }
+
+    if (engineSound != null)
+    {
+      engineSound.pitch = 1f + ((theRB.linearVelocity.magnitude / maxSpeed) * 2f);
     }
   }
 
