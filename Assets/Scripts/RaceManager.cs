@@ -2,7 +2,13 @@ using UnityEngine;
 
 public class RaceManager : MonoBehaviour
 {
+    public static RaceManager instance;
     public CheckPoints[] allCheckPoints;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

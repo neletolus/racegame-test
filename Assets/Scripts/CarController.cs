@@ -40,6 +40,8 @@ public class CarController : MonoBehaviour
   public AudioSource skidSound;
   public float skidFadeSpeed;
 
+  private int nextCheckPoint = 0;
+  
   // Start is called once before the first execution of Update after the MonoBehaviour is created
   void Start()
   {
@@ -179,6 +181,18 @@ public class CarController : MonoBehaviour
     {
       transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0f, turnInput * turnStrength * Time.deltaTime * Mathf.Sign(speedInput) * theRB.linearVelocity.magnitude / maxSpeed, 0f));
       theRB.rotation = transform.rotation; // Rigidbodyの回転も同期
+    }
+  }
+
+  public void CheckPointHit(int cpNumber)
+  {
+    if (cpNumber == nextCheckPoint)
+    {
+      nextCheckPoint++;
+      if (nextCheckPoint > RaceManager.instance.allCheckPoints.Length - 1) // Assuming there are 4 checkpoints numbered 0 to 3
+      {
+        nextCheckPoint = 0; // Reset to the first checkpoint after completing all
+      }
     }
   }
 }
